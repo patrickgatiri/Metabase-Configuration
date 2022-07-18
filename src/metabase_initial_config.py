@@ -1,10 +1,8 @@
 import os
 import sys
 
-from pyrsistent import m
-
 # Custom defined modules
-import user_setup
+import user
 import embedding
 
 ### Environment Variables ###
@@ -54,7 +52,7 @@ def initial_config():
     }
 
     mb_url = build_connection_string(mb_protocol, mb_host, mb_port)
-    session_id = user_setup.get_session_id(mb_url, mb_user)
+    session_id = user.get_session_id(mb_url, mb_user)
     embedding_secret_key = embedding.set_embedding_secret(mb_url, session_id)
 
 initial_config()
