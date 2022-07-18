@@ -9,7 +9,7 @@ def get_session_id(mb_url, mb_user):
     url = "{}/api/setup".format(mb_url)
 
     setup_token = get_setup_token(mb_url)
-    sessionID = ""
+    session_id = ""
 
     response = requests.post(url,
         headers = {"Content-Type": "application/json"},
@@ -24,9 +24,9 @@ def get_session_id(mb_url, mb_user):
             }
         })
     if response.ok:
-        sessionID = response.json()["id"]
+        session_id = response.json()["id"]
     else:
         print("ERROR: Failure creating initial user")
         sys.exit(1)
     
-    return sessionID
+    return session_id
