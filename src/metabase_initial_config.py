@@ -21,9 +21,9 @@ def getEnvVariable(env_variable_name):
         if os.environ[env_variable_name]:
             env_value = os.environ[env_variable_name]
             if not env_variable_name == mb_user_pass_env:
-                print("Using {} as {}".format(env_variable_name, env_value))
+                print("INFO: Using {} as {}".format(env_variable_name, env_value))
     except KeyError:
-        print("{} environment variable not set.".format(env_variable_name))
+        print("ERROR: {} environment variable not set.".format(env_variable_name))
         sys.exit(1)
     
     return env_value
@@ -50,4 +50,7 @@ def initial_config():
     }
 
     mb_url = build_connection_string(mb_protocol, mb_host, mb_port)
-    sessionID = user_setup.getSessionID(mb_url, mb_user)
+    sessionID = user_setup.get_session_id(mb_url, mb_user)
+    print(sessionID)
+
+initial_config()
