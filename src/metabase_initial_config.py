@@ -4,6 +4,7 @@ import sys
 # Custom defined modules
 import user
 import embedding
+import dashboard
 
 ### Environment Variables ###
 # Metabase URL
@@ -53,6 +54,13 @@ def initial_config():
 
     mb_url = build_connection_string(mb_protocol, mb_host, mb_port)
     session_id = user.get_session_id(mb_url, mb_user)
+    print("DEBUG: Using session ID - {}".format(session_id))
+
     embedding_secret_key = embedding.set_embedding_secret(mb_url, session_id)
+    resource_name = "dashboard"
+    resource_number = dashboard.create_dashboard(mb_url, session_id)
+    print("DEBUG: Embedding secret key - {}".format(embedding_secret_key))
+    print("DEBUG: Resource name - {}".format(resource_name))
+    print("DEBUG: Resource number - {}".format(resource_number))
 
 initial_config()
