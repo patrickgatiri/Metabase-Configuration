@@ -10,5 +10,8 @@ export MB_USER_PASS="Prevoir@123"
 export MB_USER_FNAME="iNSight"
 export MB_USER_LNAME="Admin"
 
+# Kubernetes namespace
+export MB_NS="test"
+
 # Run base script
 /usr/bin/python3 ../src/metabase_initial_config.py

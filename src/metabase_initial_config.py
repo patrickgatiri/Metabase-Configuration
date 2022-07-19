@@ -18,6 +18,9 @@ mb_user_pass_env = "MB_USER_PASS"
 mb_user_fname_env = "MB_USER_FNAME"
 mb_user_lname_env = "MB_USER_LNAME"
 
+# Kubernetes namespace
+mb_namespace_env = "MB_NS"
+
 # Reads environment variables
 def getEnvVariable(env_variable_name):
     try:
@@ -51,6 +54,8 @@ def initial_config():
         "last_name": mb_user_lname,
         "site_name": "PREVOIR"
     }
+
+    mb_namespace = getEnvVariable(mb_namespace_env)
 
     mb_url = build_connection_string(mb_protocol, mb_host, mb_port)
     session_id = user.get_session_id(mb_url, mb_user)
