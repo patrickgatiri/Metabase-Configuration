@@ -1,5 +1,4 @@
 import sys
-from urllib import response
 import requests
 
 def create_card(mb_url, session_id, dashboard_id):
@@ -17,7 +16,7 @@ def create_card(mb_url, session_id, dashboard_id):
     if card_id_response.ok:
         card_id = card_id_response.json()["id"]
     else:
-        print("ERROR: {}".format(response.text))
+        print("ERROR: {}".format(card_id_response.text))
         sys.exit(1)
 
     create_card_response = requests.put(card_url,
