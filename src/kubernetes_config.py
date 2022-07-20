@@ -34,7 +34,7 @@ def create_configmap(api, namespace, resource_name, resource_number):
         print("INFO: ConfigMap created under the name \"{}\"".format(client.ApiClient().sanitize_for_serialization(api_response)["metadata"]["name"]))
 
 def create_k8s_resources(namespace, embedding_secret_key, resource_name, resource_number):
-    config.load_kube_config()
+    config.load_incluster_config()
     client.configuration.assert_hostname = False
 
     v1 = client.CoreV1Api()
