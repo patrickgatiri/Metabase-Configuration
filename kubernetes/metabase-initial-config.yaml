@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: metabase-initial-config
+  labels:
+    app: metabase
+
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: metabase-initial-config
+spec:
+  template:
+    spec:
+      serviceAccountName: metabase-initial-config
+      containers:
+      - name: metabase-initial-config
+        image: patrick358/metabase-config
+        command: ["python", "/app/metabase_initial_config.py"]
+        env:
+        # METABASE URL
+        - name: MB_HOST
+          value: "metabase-deployment.test.svc.cluster.local"
+        - name: MB_PORT
+          value: "3000"
+        - name: MB_PROTOCOL
+          value: "http"
+
+        # Metabase User
+        - name: MB_USER_EMAIL
+          value: "admin@prevoir.mu"
+        - name: MB_USER_PASS
+          value: "Prevoir@123"
+        - name: MB_USER_FNAME
+          value: "iNSight"
+        - name: MB_USER_LNAME
+          value: "Admin"
+        
+        # Kubernetes namespace
+        - name: MB_NS
+          value: test
+
+      restartPolicy: OnFailure   

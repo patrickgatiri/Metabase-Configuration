@@ -40,5 +40,3 @@ def create_k8s_resources(namespace, embedding_secret_key, resource_name, resourc
     v1 = client.CoreV1Api()
     create_secret(v1, namespace, embedding_secret_key)
     create_configmap(v1, namespace, resource_name, resource_number)
-
-create_k8s_resources("test", "password", "Dashboard", "1")

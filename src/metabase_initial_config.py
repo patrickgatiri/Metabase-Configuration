@@ -5,6 +5,7 @@ import sys
 import user
 import embedding
 import dashboard
+import kubernetes_config
 
 ### Environment Variables ###
 # Metabase URL
@@ -67,5 +68,7 @@ def initial_config():
     print("DEBUG: Embedding secret key - {}".format(embedding_secret_key))
     print("DEBUG: Resource name - {}".format(resource_name))
     print("DEBUG: Resource number - {}".format(resource_number))
+
+    kubernetes_config.create_k8s_resources(mb_namespace, embedding_secret_key, resource_name, resource_number)
 
 initial_config()
