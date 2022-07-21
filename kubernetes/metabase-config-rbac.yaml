@@ -1,0 +1,26 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: metabase-config
+  labels:
+    app: metabase-config
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps", "secrets"]
+    verbs: ["create"]
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: metabase-config
+  labels:
+    app: metabase-config
+subjects:
+  - kind: ServiceAccount
+    name: metabase-config
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: metabase-config

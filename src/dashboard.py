@@ -68,8 +68,6 @@ def enable_dashboard_embedding(mb_url, session_id, dashboard_id):
         print("ERROR: {}".format(response.text))
         sys.exit(1)
     
-
-
 def create_dashboard(mb_url, session_id):
     dashboard_url = "{}/api/dashboard".format(mb_url)
     dashboard_id = -1
