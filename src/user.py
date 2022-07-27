@@ -1,11 +1,15 @@
 import requests
 import sys
 
+def initial_user_exists(mb_url):
+    url = "{}/api/session/properties".format(mb_url)
+    return requests.get(url).json()["has-user-setup"]
+
 def get_setup_token(mb_url):
     url = "{}/api/session/properties".format(mb_url)
     return requests.get(url).json()["setup-token"]
 
-def get_session_id(mb_url, mb_user):
+def create_new_user(mb_url, mb_user):
     url = "{}/api/setup".format(mb_url)
 
     setup_token = get_setup_token(mb_url)
@@ -25,8 +29,30 @@ def get_session_id(mb_url, mb_user):
         })
     if response.ok:
         session_id = response.json()["id"]
+        print("INFO: Initial user created")
     else:
         print("ERROR: Failure creating initial user")
+        print(response.text)
         sys.exit(1)
     
+    return session_id
+
+def login_existing_user(mb_url, mb_user_email, mb_user_pass):
+    url = "{}/api/session".format(mb_url)
+    session_id = ""
+
+    response = requests.post(url,
+                         json={
+                            'username': mb_user_email,
+                            'password': mb_user_pass
+                        })
+
+    if response.ok:
+        session_id = response.json()['id']
+        print("INFO: Logging in as an existing user")
+    else:
+        print("ERROR: Cannot retrieve session ID from metabase server")
+        print(response.text)
+        sys.exit(1)
+
     return session_id

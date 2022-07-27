@@ -44,6 +44,7 @@ def initial_config():
     mb_host = getEnvVariable(mb_host_env)
     mb_port = getEnvVariable(mb_port_env)
 
+
     mb_user_email = getEnvVariable(mb_user_email_env)
     mb_user_pass = getEnvVariable(mb_user_pass_env)
     mb_user_fname = getEnvVariable(mb_user_fname_env)
@@ -59,7 +60,13 @@ def initial_config():
     mb_namespace = getEnvVariable(mb_namespace_env)
 
     mb_url = build_connection_string(mb_protocol, mb_host, mb_port)
-    session_id = user.get_session_id(mb_url, mb_user)
+    session_id = None
+
+    if not user.initial_user_exists:
+        session_id = user.create_new_user(mb_url, mb_user)
+    else:
+        session_id = user.login_existing_user(mb_url, mb_user_email, mb_user_pass)
+
     print("DEBUG: Using session ID - {}".format(session_id))
 
     embedding_secret_key = embedding.set_embedding_secret(mb_url, session_id)

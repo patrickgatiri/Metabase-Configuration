@@ -4,9 +4,6 @@ import base64
 configmap_name = "metabase-embedded-resource"
 secret_name = "metabase-embedding-secret-key"
 
-configmap_name = "vault-operator-lock"
-secret_name = "vault-server-unseal-keys"
-
 def create_secret(api, namespace, embedding_secret_key):
     secret_key = "embedding-secret-key"
 
