@@ -38,6 +38,8 @@ def create_new_user(mb_url, mb_user):
     return session_id
 
 def login_existing_user(mb_url, mb_user_email, mb_user_pass):
+    print("INFO: Logging in as an existing user")
+    
     url = "{}/api/session".format(mb_url)
     session_id = ""
 
@@ -49,7 +51,6 @@ def login_existing_user(mb_url, mb_user_email, mb_user_pass):
 
     if response.ok:
         session_id = response.json()['id']
-        print("INFO: Logging in as an existing user")
     else:
         print("ERROR: Cannot retrieve session ID from metabase server")
         print(response.text)

@@ -49,8 +49,7 @@ def configmap_exists(api, namespace, configmap_name):
     return False
 
 def create_k8s_resources(namespace, embedding_secret_key, resource_name, resource_number):
-    # config.load_incluster_config()
-    config.load_kube_config()
+    config.load_incluster_config()
     client.configuration.assert_hostname = False
 
     v1 = client.CoreV1Api()
@@ -64,5 +63,3 @@ def create_k8s_resources(namespace, embedding_secret_key, resource_name, resourc
         create_configmap(v1, namespace, resource_name, resource_number)
     else:
         print("ERROR: Cannot create configmap. Configmap \"{}\" in namespace \"{}\" already exists".format(configmap_name, namespace))
-
-create_k8s_resources("vault", "123", "dashboard", "1")

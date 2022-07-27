@@ -60,9 +60,9 @@ def initial_config():
     mb_namespace = getEnvVariable(mb_namespace_env)
 
     mb_url = build_connection_string(mb_protocol, mb_host, mb_port)
-    session_id = None
+    session_id = ""
 
-    if not user.initial_user_exists:
+    if not user.initial_user_exists(mb_url):
         session_id = user.create_new_user(mb_url, mb_user)
     else:
         session_id = user.login_existing_user(mb_url, mb_user_email, mb_user_pass)
