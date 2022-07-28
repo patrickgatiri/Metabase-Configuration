@@ -1,5 +1,7 @@
 from kubernetes import client, config
+from kubernetes.client.rest import ApiException
 import base64
+import sys
 
 configmap_name = "metabase-embedded-resource"
 secret_name = "metabase-embedding-secret-key"
@@ -48,6 +50,38 @@ def configmap_exists(api, namespace, configmap_name):
             return True
     return False
 
+def delete_existing_secret(api, namespace, secret_name):
+    try:
+        api.delete_namespaced_secret(
+            name = secret_name,
+            namespace = namespace,
+            body = client.V1DeleteOptions(
+                propagation_policy='Foreground',
+                grace_period_seconds=5)
+        )
+        
+        print("INFO: Deleted existing secret \"{}\" in namespace \"{}\"".format(secret_name, namespace))
+    except ApiException as exception:
+        print("ERROR: Cannot delete existing secret")
+        print(exception.body)
+        sys.exit(1)
+
+def delete_existing_config_map(api, namespace, configmap_name):
+    try:
+        api.delete_namespaced_config_map(
+            name = configmap_name,
+            namespace = namespace,
+            body = client.V1DeleteOptions(
+                propagation_policy='Foreground',
+                grace_period_seconds=5)
+        )
+
+        print("INFO: Deleted existing configmap \"{}\" in namespace \"{}\"".format(configmap_name, namespace))
+    except ApiException as exception:
+        print("ERROR: Cannot delete existing configmap")
+        print(exception.body)
+        sys.exit(1)
+
 def create_k8s_resources(namespace, embedding_secret_key, resource_name, resource_number):
     config.load_incluster_config()
     client.configuration.assert_hostname = False
@@ -57,9 +91,13 @@ def create_k8s_resources(namespace, embedding_secret_key, resource_name, resourc
     if not secret_exists(v1, namespace, secret_name):
         create_secret(v1, namespace, embedding_secret_key)
     else:
-        print("ERROR: Cannot create secret. Secret \"{}\" in namespace \"{}\" already exists.".format(secret_name, namespace))
+        print("INFO: Secret \"{}\" in namespace \"{}\" already exists.".format(secret_name, namespace))
+        delete_existing_secret(v1, namespace, secret_name)
+        create_secret(v1, namespace, embedding_secret_key)
 
     if not configmap_exists(v1, namespace, configmap_name):
         create_configmap(v1, namespace, resource_name, resource_number)
     else:
-        print("ERROR: Cannot create configmap. Configmap \"{}\" in namespace \"{}\" already exists".format(configmap_name, namespace))
+        print("INFO: Configmap \"{}\" in namespace \"{}\" already exists".format(configmap_name, namespace))
+        delete_existing_config_map(v1, namespace, configmap_name)
+        create_configmap(v1, namespace, resource_name, resource_number)
